@@ -5,6 +5,16 @@
     Description: Script for WhatABook
  */
 
+// Import the MongoDB driver
+const { MongoClient } = require('mongodb');
+
+// Connection URL
+const url = 'mongodb+srv://WhatABook_user:s3cret@whatabook.0pwpong.mongodb.net/';
+const dbName = 'WhatABook';
+
+// Create a new MongoClient instance
+const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
+
 // Function to initialize the database
 async function initDatabase() {
     try {
@@ -15,7 +25,7 @@ async function initDatabase() {
         // Check if collections exist before dropping
         const collections = await db.listCollections().toArray();
         const existingCollections = collections.map((collection) => collection.name);
-
+/*
         if (existingCollections.includes('books')) {
             await db.dropCollection('books').drop();
         }
@@ -32,11 +42,14 @@ async function initDatabase() {
         await db.dropCollection('books');
         await db.dropCollection('customers');
         await db.dropCollection('wishlistitems');
-
+*/
         // Create collections
         const booksCollection = db.collection('books');
         const customersCollection = db.collection('customers');
         const wishlistItemsCollection = db.collection('wishlistitems');
+
+        // Create the "User" collection
+        const userCollection = db.collection('User');
 
         // Insert data into collections
         await booksCollection.insertMany(booksData);
@@ -80,12 +93,6 @@ const wishlistItemsData = [
     { customerId: 'c1008', bookId: ['s1005', 's1006', 's1007', 's1008'] },
     { customerId: 'c1009', bookId: ['s1001', 's1002', 's1003', 's1004'] },
 ];
-
-// Create a new MongoClient instance
-const { MongoClient } = require('mongodb');
-const url = 'mongodb+srv://whatABook_user:s3cret@cluster0.wmphxtw.mongodb.net/';
-const dbName = 'whatABook';
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // Call the initDatabase function with the client
 initDatabase();
